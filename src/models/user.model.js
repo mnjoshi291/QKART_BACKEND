@@ -24,6 +24,9 @@ const userSchema = mongoose.Schema(
       required: true,
       trim: true,
       minLength:8,
+    },
+    password: {
+      type: String,
       validate(value) {
         if (!value.match(/\d/) || !value.match(/[a-zA-Z]/)) {
           throw new Error(
@@ -62,6 +65,15 @@ userSchema.statics.isEmailTaken = async function (email) {
   else{
     return false;
   }
+};
+
+/**
+ * Check if entered password matches the user's password
+ * @param {string} password
+ * @returns {Promise<boolean>}
+ */
+userSchema.methods.isPasswordMatch = async function (password) {
+
 };
 
 
