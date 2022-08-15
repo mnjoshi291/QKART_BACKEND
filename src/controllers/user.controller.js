@@ -45,13 +45,37 @@ const { userService } = require("../services");
  *
  */
 const getUser = catchAsync(async (req, res) => {
-  try {
-    const {userId} = req.params;
-    console.log(userId);
-    const users = await userService.getUserById(userId);
-    res.status(200).json(users);
-  } catch(error){
-    throw new ApiError(httpStatus.NOT_FOUND,"User not found")
+  let data;
+  // CRIO_SOLUTION_START_MODULE_CART
+  if (req.query.q === "address") {
+    data = await userService.getUserAddressById(req.params.userId);
+  } else {
+    // CRIO_SOLUTION_END_MODULE_CART
+    data = await userService.getUserById(req.params.userId);
+    // CRIO_SOLUTION_START_MODULE_CART
+  }
+  // CRIO_SOLUTION_END_MODULE_CART
+
+  if (!data) {
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+  }
+  // CRIO_SOLUTION_START_MODULE_AUTH
+  if (data.email != req.user.email) {
+    throw new ApiError(
+      httpStatus.FORBIDDEN,
+      "User not authorized to access this resource"
+    );
+  }
+  // CRIO_SOLUTION_END_MODULE_AUTH
+  // CRIO_SOLUTION_START_MODULE_CART
+  if (req.query.q === "address") {
+    res.send({
+      address: data.address,
+    });
+  } else {
+    // CRIO_SOLUTION_END_MODULE_CART
+    res.send(data);
+    // CRIO_SOLUTION_START_MODULE_CART
   }
 });
 

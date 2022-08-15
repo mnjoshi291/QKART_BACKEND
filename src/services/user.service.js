@@ -13,7 +13,7 @@ const { ModuleKind } = require("typescript");
  */
 
 const getUserById=async(id)=>{
-    const data=await User.findById(id);
+    let data = await User.findById({ _id: id });
     return data;
 }
 // TODO: CRIO_TASK_MODULE_UNDERSTANDING_BASICS - Implement getUserByEmail(email)
@@ -24,8 +24,7 @@ const getUserById=async(id)=>{
  * @returns {Promise<User>}
  */
  const getUserByEmail=async(email)=>{
-    const data=await User.findOne(email);
-    return data;
+    return User.findOne({ email });
 }
 // TODO: CRIO_TASK_MODULE_UNDERSTANDING_BASICS - Implement createUser(user)
 /**
@@ -49,15 +48,18 @@ const getUserById=async(id)=>{
  *
  * 200 status code on duplicate email - https://stackoverflow.com/a/53144807
  */
- const  createUser=async (user)=>{
-    const emailTaken= await User.isEmailTaken(user.email);
-    if(emailTaken){
-        throw new ApiError(httpStatus.BAD_REQUEST,"Email already taken");
-    }
-    else{
-    const data= await User.create(user);
-    return data;
-    }
+ const  createUser=async (userBody)=>{
+    if (await User.isEmailTaken(userBody.email)) {
+        throw new ApiError(httpStatus.OK, "Email already taken");
+      }
+    
+      const salt = await bcrypt.genSalt();
+    
+      const hashedPassword = await bcrypt.hash(userBody.password, salt);
+    
+    
+      const user = await User.create({ ...userBody, password: hashedPassword });
+      return user;
 };
 
 module.exports ={
