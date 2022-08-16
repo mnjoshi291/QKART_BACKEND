@@ -2,8 +2,11 @@ const httpStatus = require("http-status");
 const ApiError = require("../utils/ApiError");
 const catchAsync = require("../utils/catchAsync");
 const { userService } = require("../services");
+const { idText } = require("typescript");
 
 // TODO: CRIO_TASK_MODULE_UNDERSTANDING_BASICS - Implement getUser() function
+
+
 // TODO: CRIO_TASK_MODULE_CART - Update function to process url with query params
 /**
  * Get user details
@@ -36,12 +39,6 @@ const { userService } = require("../services");
  *     "__v": 0
  * }
  * 
- *
- * Example response status codes:
- * HTTP 200 - If request successfully completes
-
- * HTTP 403 - If request data doesn't match that of authenticated user
-
  * Request url - <workspace-ip>:8082/v1/users/6010008e6c3477697e8eaba3?q=address
  * Response - 
  * {
@@ -57,7 +54,23 @@ const { userService } = require("../services");
  * @returns {User | {address: String}}
  *
  */
+// const getUser = catchAsync(async (req, res) => {
+
+//   let data;
+
+//   data = await userService.getUserById(req.params.userId);
+
+//   if (!data) {
+//     throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+//   }
+
+//   if (data.email !== req.user.email) {
+//     throw new ApiError(httpStatus.FORBIDDEN, "User not authorized to view some other user data");
+//   }
+//   res.send(data);
+// });
 const getUser = catchAsync(async (req, res) => {
+  // CRIO_SOLUTION_START_MODULE_UNDERSTANDING_BASICS
   let data;
   // CRIO_SOLUTION_START_MODULE_CART
   if (req.query.q === "address") {
@@ -74,16 +87,6 @@ const getUser = catchAsync(async (req, res) => {
   }
   // CRIO_SOLUTION_START_MODULE_AUTH
   if (data.email != req.user.email) {
-}
-});
-
-const setAddress = catchAsync(async (req, res) => {
-  const user = await userService.getUserById(req.params.userId);
-
-  if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
-  }
-  if (user.email != req.user.email) {
     throw new ApiError(
       httpStatus.FORBIDDEN,
       "User not authorized to access this resource"
@@ -100,10 +103,34 @@ const setAddress = catchAsync(async (req, res) => {
     res.send(data);
     // CRIO_SOLUTION_START_MODULE_CART
   }
+  // CRIO_SOLUTION_END_MODULE_CART
+  // CRIO_SOLUTION_END_MODULE_UNDERSTANDING_BASICS
 });
+
+const setAddress = catchAsync(async (req, res) => {
+  const user = await userService.getUserById(req.params.userId);
+
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+  }
+  if (user.email != req.user.email) {
+    throw new ApiError(
+      httpStatus.FORBIDDEN,
+      "User not authorized to access this resource"
+    );
+  }
+
+  const address = await userService.setAddress(user, req.body.address);
+
+  res.send({
+    address: address,
+  });
+});
+
+
 
 
 module.exports = {
   getUser,
-
+  setAddress,
 };

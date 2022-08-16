@@ -62,12 +62,6 @@ const getUserById=async(id)=>{
       return user;
 };
 
-module.exports ={
-    createUser:createUser,
-    getUserByEmail:getUserByEmail,
-    getUserById:getUserById
-}
-
 // TODO: CRIO_TASK_MODULE_CART - Implement getUserAddressById()
 /**
  * Get subset of user's data by id
@@ -77,6 +71,7 @@ module.exports ={
  * @returns {Promise<User>}
  */
 const getUserAddressById = async (id) => {
+  return User.findOne({ _id: id }, { email: 1, address: 1 });
 };
 
 /**
@@ -91,3 +86,10 @@ const setAddress = async (user, newAddress) => {
   return user.address;
 };
 
+module.exports = {
+  getUserById,
+  getUserByEmail,
+  createUser,
+  getUserAddressById,
+  setAddress,
+};
