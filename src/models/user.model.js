@@ -73,8 +73,6 @@ userSchema.methods.isPasswordMatch = async function (password) {
   return bcrypt.compare(password, user.password);
 };
 
-
-
 // TODO: CRIO_TASK_MODULE_UNDERSTANDING_BASICS
 /*
  * Create a Mongoose model out of userSchema and export the model as "User"

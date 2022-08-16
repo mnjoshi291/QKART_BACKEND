@@ -11,5 +11,9 @@ router.use("/auth", authRoute);
 
 // TODO: CRIO_TASK_MODULE_AUTH - Reroute all API requests beginning with the `/v1/auth` route to Express router in auth.route.js 
 router.use("/products", productRoute);
+const cartRoute = require("./cart.route");
+
+router.use("/products", productRoute);
+router.use("/cart", cartRoute);
 
 module.exports = router;
