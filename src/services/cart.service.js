@@ -7,6 +7,7 @@ const config = require("../config/config");
 // TODO: CRIO_TASK_MODULE_CART - Implement the Cart service methods
 
 /** 
+/**
  * Fetches cart for a user
  * - Fetch user's cart from Mongo
  * - If cart doesn't exist, throw ApiError
@@ -90,7 +91,6 @@ const addProductToCart = async (user, productId, quantity) => {
   await cart.save();
 
   return cart;
-  
 };
 
 /**
@@ -172,7 +172,6 @@ const deleteProductFromCart = async (user, productId) => {
   
   cart.cartItems.splice(productIndex, 1);
   await cart.save();
-
 };
 
 // TODO: CRIO_TASK_MODULE_TEST - Implement checkout function
