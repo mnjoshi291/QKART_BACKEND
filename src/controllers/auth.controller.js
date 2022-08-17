@@ -2,6 +2,7 @@ const httpStatus = require("http-status");
 const catchAsync = require("../utils/catchAsync");
 const { authService, userService, tokenService } = require("../services");
 const { response } = require("express");
+
 /**
  * Perform the following steps:
  * -  Call the userService to create a new user
@@ -32,12 +33,15 @@ const { response } = require("express");
  *
  */
 const register = catchAsync(async (req, res) => {
+  
     const user = await userService.createUser(req.body);
+
     const tokens = await tokenService.generateAuthTokens(user)
     res.status(httpStatus.CREATED).send({
       user,
       tokens,
     });
+  
 });
 
 /**
@@ -70,8 +74,10 @@ const register = catchAsync(async (req, res) => {
  *
  */
 const login = catchAsync(async (req, res) => {
+
   const { email, password } = req.body;
   const user = await authService.loginUserWithEmailAndPassword(email, password);
+
   const tokens = await tokenService.generateAuthTokens(user);
     res.send({
       user,

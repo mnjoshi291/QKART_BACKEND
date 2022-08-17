@@ -22,8 +22,13 @@ const cartSchema = mongoose.Schema(
       type: String,
       default: config.default_payment_option,
     },
-  });
     // CRIO_SOLUTION_END_MODULE_CART
+  },
+  {
+    timestamps: false,
+  }
+);
+
 
 /**
  * @typedef Cart

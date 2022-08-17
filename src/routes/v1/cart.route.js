@@ -23,6 +23,9 @@ router.put(
 );
 router.put(
   "/checkout",
+  // CRIO_SOLUTION_START_MODULE_TEST
+  auth,
+  // CRIO_SOLUTION_END_MODULE_TEST
   cartController.checkout
 );
 

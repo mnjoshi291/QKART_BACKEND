@@ -1,31 +1,34 @@
 const { User } = require("../models");
 const httpStatus = require("http-status");
 const ApiError = require("../utils/ApiError");
-const bcrypt = require("bcryptjs");
-const { ModuleKind } = require("typescript");
+
 
 // TODO: CRIO_TASK_MODULE_UNDERSTANDING_BASICS - Implement getUserById(id)
+const bcrypt = require("bcryptjs");
+
 /**
  * Get User by id
  * - Fetch user object from Mongo using the "_id" field and return user object
  * @param {String} id
  * @returns {Promise<User>}
  */
-
-const getUserById=async(id)=>{
-    let data = await User.findById({ _id: id });
+const getUserById = async (id) => {
+  let data = await User.findById({ _id: id });
     return data;
-}
+};
+
 // TODO: CRIO_TASK_MODULE_UNDERSTANDING_BASICS - Implement getUserByEmail(email)
 /**
  * Get user by email
  * - Fetch user object from Mongo using the "email" field and return user object
  * @param {string} email
  * @returns {Promise<User>}
+ * 
  */
- const getUserByEmail=async(email)=>{
+const getUserByEmail = async (email) => {
     return User.findOne({ email });
-}
+};
+
 // TODO: CRIO_TASK_MODULE_UNDERSTANDING_BASICS - Implement createUser(user)
 /**
  * Create a user
@@ -48,19 +51,22 @@ const getUserById=async(id)=>{
  *
  * 200 status code on duplicate email - https://stackoverflow.com/a/53144807
  */
- const  createUser=async (userBody)=>{
-    if (await User.isEmailTaken(userBody.email)) {
-        throw new ApiError(httpStatus.OK, "Email already taken");
-      }
-    
-      const salt = await bcrypt.genSalt();
-    
-      const hashedPassword = await bcrypt.hash(userBody.password, salt);
-    
-    
-      const user = await User.create({ ...userBody, password: hashedPassword });
-      return user;
+
+const createUser = async (userBody) => {
+  if (await User.isEmailTaken(userBody.email)) {
+    throw new ApiError(httpStatus.OK, "Email already taken");
+  }
+
+  const salt = await bcrypt.genSalt();
+
+  const hashedPassword = await bcrypt.hash(userBody.password, salt);
+
+
+  const user = await User.create({ ...userBody, password: hashedPassword });
+  return user;
 };
+
+
 
 // TODO: CRIO_TASK_MODULE_CART - Implement getUserAddressById()
 /**
@@ -71,6 +77,7 @@ const getUserById=async(id)=>{
  * @returns {Promise<User>}
  */
 const getUserAddressById = async (id) => {
+
   return User.findOne({ _id: id }, { email: 1, address: 1 });
 };
 

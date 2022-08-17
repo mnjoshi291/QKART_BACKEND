@@ -17,6 +17,7 @@ const { tokenTypes } = require("../config/tokens");
  * @returns {string}
  */
 const generateToken = (userId, expires, type, secret = config.jwt.secret) => {
+
   const payload = {
     sub: userId,
     type,
@@ -42,6 +43,21 @@ const generateToken = (userId, expires, type, secret = config.jwt.secret) => {
  * }
  */
 const generateAuthTokens = async (user) => {
+
+  const acessTokenExpiry =
+    Math.floor(Date.now() / 1000) + (config.jwt.accessExpirationMinutes * 60);
+  
+  const accessToken = generateToken(
+    user._id,
+    acessTokenExpiry,
+    tokenTypes.ACCESS
+  );
+  return {
+    access: {
+      token: accessToken,
+      expires: new Date(acessTokenExpiry * 1000)
+    }
+  }
 };
 
 module.exports = {

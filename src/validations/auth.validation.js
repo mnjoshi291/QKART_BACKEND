@@ -26,6 +26,7 @@ const login = {
     email: Joi.string().required().email(),
     password: Joi.string().required(),
   }),
+
 };
 
 module.exports = {

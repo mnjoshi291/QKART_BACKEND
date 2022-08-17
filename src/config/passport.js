@@ -27,6 +27,7 @@ const jwtOptions = {
  * @param done - callback function
  */
 const jwtVerify = async (payload, done) => {
+
   try {
     if (payload.type != tokenTypes.ACCESS) {
       return done(new Error("Invalid token type"), false);
@@ -43,7 +44,7 @@ const jwtVerify = async (payload, done) => {
 };
 
 // TODO: CRIO_TASK_MODULE_AUTH - Uncomment below lines of code once the "jwtVerify" and "jwtOptions" are implemented
- const jwtStrategy = new JwtStrategy(jwtOptions, jwtVerify);
+const jwtStrategy = new JwtStrategy(jwtOptions, jwtVerify);
 
 module.exports = {
   jwtStrategy,

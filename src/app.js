@@ -5,13 +5,17 @@ const httpStatus = require("http-status");
 const routes = require("./routes/v1");
 const { errorHandler } = require("./middlewares/error");
 const ApiError = require("./utils/ApiError");
+
 const app = express();
+
 const { jwtStrategy } = require("./config/passport");
 const helmet = require("helmet");
 const passport = require("passport");
+
+// const app = express();
+
 app.use(passport.initialize());
 passport.use("jwt", jwtStrategy);
-
 // set security HTTP headers - https://helmetjs.github.io/
 app.use(helmet());
 
@@ -34,13 +38,11 @@ app.options("*", cors());
 app.use("/v1", routes);
 
 // send back a 404 error for any unknown api request
-
-app.use("/v1", routes);
-
 app.use((req, res, next) => {
     next(new ApiError(httpStatus.NOT_FOUND, "Not found"));
 });
 
 // handle error
 app.use(errorHandler);
+
 module.exports = app;

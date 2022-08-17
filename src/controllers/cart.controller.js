@@ -88,9 +88,8 @@ const checkout = catchAsync(async (req, res) => {
   return res.status(httpStatus.NO_CONTENT).send();
 });
 
-/**
- * Checkout user's cart
- */
+
+
 module.exports = {
   getCart,
   addProductToCart,
